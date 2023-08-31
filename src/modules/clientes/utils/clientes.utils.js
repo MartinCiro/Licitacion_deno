@@ -99,53 +99,53 @@ async function crearUsuarioU(
   }
 }
 
-// async function crearUsuarioU(
-//   nombre,
-//   num_cedula,
-//   pais,
-//   departamento,
-//   ciudad,
-//   pass
-// ) {
-//   const pool = await getConnection();
-//   try {
-//     const hash = await bcrypt.hash(pass, 10);
+async function crearUsuarioU(
+  nombre,
+  num_cedula,
+  pais,
+  departamento,
+  ciudad,
+  pass
+) {
+  const pool = await getConnection();
+  try {
+    const hash = await bcrypt.hash(pass, 10);
 
-//     const params = [nombre, num_cedula, pais, departamento, ciudad];
-//     const insertQuery = `
-//             INSERT INTO huesped (
-//                 nombre, num_cedula, pais, departamento, ciudad)
-//             VALUES (?, ?, ?, ?, ?)`; // No se usa RETURNING en MySQL
+    const params = [nombre, num_cedula, pais, departamento, ciudad];
+    const insertQuery = `
+            INSERT INTO huesped (
+                nombre, num_cedula, pais, departamento, ciudad)
+            VALUES (?, ?, ?, ?, ?)`; //No se usa RETURNING en MySQL
 
-//     const result = await pool.query(insertQuery, params);
-//     const insertedId = result.insertId; // Obtenemos el ID de la fila recién insertada
+     const result = await pool.query(insertQuery, params);
+     const insertedId = result.insertId; // Obtenemos el ID de la fila recién insertada
 
-//     const insertValidationQuery = `
-//         INSERT INTO validacion (num_cedula, pass)
-//         VALUES (?, ?)`;
+     const insertValidationQuery = `
+         INSERT INTO validacion (num_cedula, pass)
+         VALUES (?, ?)`;
 
-//     const validationResult = await pool.query(insertValidationQuery, [
-//       num_cedula,
-//       hash,
-//     ]);
+     const validationResult = await pool.query(insertValidationQuery, [
+       num_cedula,
+       hash,
+     ]);
 
-//     return {
-//       id: insertedId,
-//       nombre,
-//       num_cedula,
-//       pais,
-//       departamento,
-//       ciudad,
-//     };
-//   } catch (error) {
-//     if (error.code === "ER_DUP_ENTRY") {
-//       throw new Error("El usuario ya se encuentra registrado");
-//     } else {
-//       console.error("Error al registrar usuario:", error);
-//       throw error;
-//     }
-//   }
-// }
+     return {
+       id: insertedId,
+       nombre,
+       num_cedula,
+       pais,
+       departamento,
+       ciudad,
+     };
+   } catch (error) {
+     if (error.code === "ER_DUP_ENTRY") {
+       throw new Error("El usuario ya se encuentra registrado");
+     } else {
+       console.error("Error al registrar usuario:", error);
+       throw error;
+     }
+   }
+ }
 
 async function validarUserU(num_cedula, pass) {
   try {
